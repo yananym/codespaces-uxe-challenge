@@ -1,13 +1,20 @@
 .doggie-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 10px;
-  padding: 10px;
-  background-color: var(--primary-bg-color);
+    padding: 5vh 5%;
+    background-color: var(--primary-bg-color);
+    container-type: inline-size;
 }
 
-.doggie-card {
-    width: 300px;
-    aspect-ratio: 16/9;
-    overflow: hidden;
+.doggie-grid--images {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 40px;
+
+    @container (max-width: 800px) {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @container (max-width: 450px) {
+        grid-template-columns: 1fr;
+    }
 }
+

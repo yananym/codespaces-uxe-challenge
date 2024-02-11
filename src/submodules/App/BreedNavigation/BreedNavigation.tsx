@@ -6,19 +6,18 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 
-const retrievePosts = async () => {
+const retrieveBreeds = async () => {
     const response = await axios.get("https://dog.ceo/api/breeds/list/all");
     return response.data;
 };
 
-export const BreedNavigation = ({title, children}: {title: string, children?: ReactNode}) => {
-    let location = useLocation();
-    const { data, error, isLoading } = useQuery("message", retrievePosts);
-    const [breeds, setBreeds] = useState<Array<string>>([]);
+type Breed = {
+    [key: string]: string[];
+}
 
-    useEffect(() => {
-        data && setBreeds(Object.keys(data.message));
-    }, [data])
+export const BreedNavigation = ({ title, children }: { title: string, children?: ReactNode }) => {
+    let location = useLocation();
+    const { data, error, isLoading } = useQuery("list", retrieveBreeds);
 
     return (
         <Navigation className="breed-navigation">
@@ -28,13 +27,20 @@ export const BreedNavigation = ({title, children}: {title: string, children?: Re
             </header>
             {
                 error ? <span>There was an error</span> :
-                    isLoading ? <LoadingIndicator />:
-                        <Expander>
-                            {breeds.map((breed, i) => <ExpanderRow key={`expander-row-${i}`} className={location.pathname.includes(breed) && 'active'} to={breed}>{breed}</ExpanderRow>)}
+                    isLoading ? <LoadingIndicator /> :
+                        <Expander className='breed-navigation--expander' defaultIsOpen title="Dogs" icon="./dog.svg">
+                            {Object.keys(data?.message).map((breed, i) =>
+                                <ExpanderRow key={`expander-row-${i}`} className={location.pathname.includes(breed) && 'active'} to={breed}>
+                                    {data?.message[breed].length > 0 ?
+                                        <Expander key={`expander-subbreed-${i}`} defaultIsOpen={false} title={breed}>
+                                            {data?.message[breed].map((subBreed: string, i) => <ExpanderRow key={`expander-subrow-${i}`} to={`${breed}/${subBreed}`}>{subBreed}</ExpanderRow>)}
+                                        </Expander> : breed}
+                                </ExpanderRow>
+                            )}
                         </Expander>
             }
             <footer className="breed-navigation--footer">
-               {children}
+                {children}
             </footer>
         </Navigation>
     )

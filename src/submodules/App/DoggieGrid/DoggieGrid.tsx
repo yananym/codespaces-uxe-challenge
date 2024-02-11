@@ -1,21 +1,39 @@
 import { useQuery } from "react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { LoadingIndicator } from "../../components";
+import { Card, LoadingIndicator } from "../../components";
 import "./DoggieGrid.scss";
+import { useLocation } from "react-router-dom";
 
-const retrievePosts = async () => {
-    const response = await axios.get('https://dog.ceo/api/breed/hound/images/random/3');
-    return response.data;
-};
 
-export const DoggieGrid = () => {
-    const { data, error, isLoading } = useQuery("message", retrievePosts);
+export const DoggieGrid = ({ pageSize = 21 }: { pageSize?: number }) => {
+    let location = useLocation();
+    const [refetching, setRefetching] = useState<boolean>(false);
+    const [breed, setBreed] = useState<string>(location.pathname);
+    const [apiUrl, setApiUrl] = useState<string>(`https://dog.ceo/api/breeds/image/random/${pageSize}`);
+
+    const retrieveImages = async () => {
+        const response = await axios.get(apiUrl);
+        return response.data;
+    };
+
+    const { data, error, isLoading, refetch } = useQuery("images", retrieveImages);
     const [images, setImages] = useState<Array<string>>([]);
 
     useEffect(() => {
+        setBreed(location.pathname);
+    }, [location])
+
+    useEffect(() => {
+        setApiUrl(`https://dog.ceo/api/breed${breed}/images/random/${pageSize}`);
+        setRefetching(true);
+        refetch().then(() => setRefetching(false));
+    }, [breed])
+
+
+    useEffect(() => {
         console.log(data)
-        data && typeof data.message[0] === 'string' && setImages(data.message);
+        if (data && typeof data.message[0] === 'string') setImages(data.message);
     }, [data])
 
     return (
@@ -24,7 +42,12 @@ export const DoggieGrid = () => {
                 error ? <span>There was an error</span> :
                     isLoading ? <LoadingIndicator /> :
                         <div className="doggie-grid--images">
-                            {images.map((image, i) => <article className="doggie-card"><img key={i} src={image} alt="doggie" /></article>)}
+                            {refetching ? <LoadingIndicator /> :
+                                images.map((image, i) => {
+                                    const caption = image.split('/')[image.split('/').length - 2];
+                                    return <Card key={`doggie-card-${i}`} image={image} imageAlt={`Image of a dog`} caption={caption} />
+                                })
+                            }
                         </div>
             }
         </div>

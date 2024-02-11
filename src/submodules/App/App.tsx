@@ -9,12 +9,7 @@ import { useLocation } from 'react-router-dom';
 
 const App = () => {
   const [theme, setTheme] = useState('light');
-  let location = useLocation();
-  const [apiUrl, setApiUrl] = useState<string>('https://dog.ceo/api/breed/hound/images');
-
-  useEffect(() => {
-      setApiUrl(`https://dog.ceo/api/breed${location.pathname}/images`);
-  }, [location])
+  
 
   const onThemeChange = (isChecked: boolean) => {
     setTheme(isChecked ? 'dark' : 'light');
