@@ -1,0 +1,50 @@
+.toggle-button--container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 1em;
+
+    --toggle-width: 40px;
+    --toggle-height: 20px;
+
+    label {
+        margin-right: 10px;
+        color: var(--primary-text-color);
+    }
+}
+
+.toggle-button {
+    width: var(--toggle-width);
+    height: var(--toggle-height);
+    background-color: transparent;
+    border-radius: 15px;
+    border: var(--primary-border);
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    .slider {
+        width: calc(var(--toggle-height) - 6px);
+        height: calc(var(--toggle-height) - 6px);
+        background-color: var(--primary-text-color);
+        border-radius: 50%;
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        transition: 0.4s;
+    }
+
+    &.checked {
+        background-color: #2196F3;
+    }
+
+    &.checked .slider {
+        transform: translateX(var(--toggle-height));
+    }
+
+    .toggle-button--input {
+        display: none;
+    }
+}

@@ -1,0 +1,22 @@
+.expander {
+    padding: 0 20px;
+}
+
+.expander-row {
+    align-items: flex-start;
+    justify-content: flex-start;
+    display: flex;
+
+    a {
+        color: var(--primary-text-color);
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    &.active {
+        text-decoration: underline;
+    }
+}

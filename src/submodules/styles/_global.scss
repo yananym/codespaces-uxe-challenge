@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    font: 16px/1.5 'Inter', sans-serif;
+    background-color: var(--primary-bg-color);
+    color: var(--primary-text-color);
+}
+
+div, header, footer, nav, ul, li, a, p, span, label, input, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
