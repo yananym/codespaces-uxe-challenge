@@ -15,6 +15,10 @@
 
     .breed-navigation--expander {
         padding: 0 20px;
+
+        &>.expander-content {
+            padding-left: 30px;
+        }
     }
 }
 
@@ -29,14 +33,20 @@
 }
 
 .breed-navigation--header {
-    display: flex;
-    align-items: center;
-    gap: 1em;
-    justify-content: center;
+
     padding: 27px 0;
     position: sticky;
     top: 0;
     background-color: var(--primary-bg-color);
+
+    a {
+        display: flex;
+        align-items: center;
+        gap: 1em;
+        justify-content: center;
+        color: var(--primary-text-color);
+        text-decoration: none;
+    }
 
     .logo {
         border-radius: 8px;

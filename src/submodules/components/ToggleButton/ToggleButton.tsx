@@ -20,12 +20,12 @@ export const ToggleButton = ({ defaultChecked, onChange, label }: { defaultCheck
     };
 
     return (
-        <div className='toggle-button--container'>
-        <div className={`toggle-button ${isChecked ? 'checked' : ''}`} onClick={handleToggle} onKeyDown={onKeyDown} tabIndex={1} >
-            <input className="toggle-button--input" type="checkbox" aria-labelledby='toggle-button--label' checked={isChecked} onChange={handleToggle} />
-            <div className="slider"></div>
-        </div>
-        {label && <label id="toggle-button--label">{label}</label>}
+        <div className='toggle-button--container' aria-checked={isChecked}>
+            <div className={`toggle-button ${isChecked ? 'checked' : ''}`} onClick={handleToggle} onKeyDown={onKeyDown} tabIndex={0} >
+                <input aria-hidden="true" className="toggle-button--input" type="checkbox" aria-labelledby='toggle-button--label' checked={isChecked} onChange={handleToggle} />
+                <div className="slider"></div>
+            </div>
+            {label && <label id="toggle-button--label">{label}</label>}
         </div>
     );
 };

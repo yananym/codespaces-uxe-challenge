@@ -1,6 +1,7 @@
 import { ReactNode, useState } from "react";
 import { Link } from "react-router-dom";
 import './Expander.scss';
+import { IconArrow } from "../Icons";
 
 export const ExpanderRow = ({ to, className, children }: { to: string, className?: string, children: ReactNode }) => {
     return (
@@ -8,7 +9,7 @@ export const ExpanderRow = ({ to, className, children }: { to: string, className
     )
 }
 
-export const Expander = ({ defaultIsOpen = false, title, icon, iconAlt, className, children }: { defaultIsOpen?: boolean, title: string, icon?: string, iconAlt?: string, className?: string, children: ReactNode[] }) => {
+export const Expander = ({ defaultIsOpen = false, title, Icon, className, children }: { defaultIsOpen?: boolean, title: string, Icon?: JSX.Element, className?: string, children: ReactNode[] }) => {
     const [expanded, setExpanded] = useState(defaultIsOpen);
 
     const toggleExpanded = () => {
@@ -19,10 +20,10 @@ export const Expander = ({ defaultIsOpen = false, title, icon, iconAlt, classNam
         <div className={`expander ${className ?? ''}`}>
             <button className="expander-header" onClick={toggleExpanded} aria-expanded={expanded}>
                 <div className="expander-title">
-                    {icon && <img src={icon} alt={iconAlt} />}
+                    {Icon}
                     {title}
                 </div>
-                <div className={`expander-icon ${expanded ? 'expanded' : ''}`}><img src="./arrow.svg" alt={`arrow ${expanded ? 'up' : 'down'}`} /></div>
+                <div className={`expander-icon ${expanded ? 'expanded' : ''}`}><IconArrow alt={`arrow ${expanded ? 'up' : 'down'}`} fill="var(--primary-text-color)" /></div>
             </button>
             {expanded && (
                 <div className="expander-content">

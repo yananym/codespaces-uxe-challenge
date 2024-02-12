@@ -1,20 +1,20 @@
 button {
-    padding: 10px 20px;
+    padding: 10px 40px;
     font-size: 16px;
-    background-color: #007bff;
-    color: #fff;
+    background-color: var(--primary-button-color);
+    color: var(--primary-text-color-reverse);
     border: none;
-    border-radius: 4px;
+    border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
   
     &:hover {
-      background-color: #0056b3;
+      background-color: var(--primary-button-hover-color);
     }
   
     &:focus {
       outline: none;
-      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+      box-shadow: 0 0 0 2px var(--primary-button-focus-outline-color);
     }
   }
   

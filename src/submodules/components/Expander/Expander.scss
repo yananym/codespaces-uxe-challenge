@@ -5,12 +5,13 @@
 .expander-header {
   display: flex;
   align-items: center;
-  padding: 10px 0;
+  padding: 0;
   cursor: pointer;
   appearance: none;
   border: none;
   background-color: transparent;
   width: 100%;
+  height: 24px;
 
   .expander-title {
     display: inline-flex;
@@ -19,9 +20,23 @@
     text-transform: capitalize;
     color: var(--primary-text-color);
 
-    img {
+    svg, img {
       margin-right: 1em;
     }
+  }
+
+  &:hover {
+    background-color: transparent;
+    border: none;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary-button-focus-outline-color);
   }
 }
 
@@ -59,7 +74,7 @@
   }
 
   &.active {
-    a::before {
+    & > a::before {
       content: '→';
       position: absolute;
       left: 10px;

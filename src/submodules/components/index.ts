@@ -5,3 +5,5 @@ export * from './ThemeProvider';
 export * from './LoadingIndicator';
 export * from './Card';
 export * from './Button';
+export * from './Icons';
+export * from './Search';
