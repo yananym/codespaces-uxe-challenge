@@ -1,23 +1,38 @@
 import { useQuery } from "react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Card, LoadingIndicator, Search } from "../../components";
+import { Card, LoadingIndicator } from "../../components";
 import "./DoggieGrid.scss";
 import { useLocation } from "react-router-dom";
+import { DoggieSearch } from "./DoggieSearch";
 
+const API_BASE_URL = "https://dog.ceo/api/breed";
 
 export const DoggieGrid = ({ pageSize = 21 }: { pageSize?: number }) => {
-    let location = useLocation();
+    const location = useLocation();
     const [refetching, setRefetching] = useState<boolean>(false);
     const [breed, setBreed] = useState<string>(location.pathname);
-    const [apiUrl, setApiUrl] = useState<string>(`https://dog.ceo/api/breeds/image/random/${pageSize}`);
+    const [apiUrl, setApiUrl] = useState<string>(`${API_BASE_URL}s/image/random/${pageSize}`);
 
-    const retrieveImages = async () => {
-        const response = await axios.get(apiUrl);
-        return response.data;
-    };
+    // const retrieveImages = async () => {
+    //     const response = await axios.get(apiUrl);
+    //     return response.data;
+    // };
 
-    const { data, error, isLoading, refetch } = useQuery("images", retrieveImages);
+    const fetchData = async () => {
+        try {
+          const response = await axios.get(apiUrl);
+          if (response.status !== 200) {
+            throw new Error('Network response was not ok');
+          }
+          const newData = await response.data;
+          return newData;
+        } catch (error) {
+          throw new Error('Error fetching data');
+        }
+      };
+
+    const { data, error, isLoading, refetch } = useQuery(["images", apiUrl], fetchData);
     const [images, setImages] = useState<Array<string>>([]);
 
     useEffect(() => {
@@ -26,18 +41,15 @@ export const DoggieGrid = ({ pageSize = 21 }: { pageSize?: number }) => {
     }, [location])
 
     useEffect(() => {
-        console.log('refetch for', breed, location.pathname)
-        setApiUrl(`https://dog.ceo/api/breed${breed}/images/random/${pageSize}`);
+        breed !== "/" && setApiUrl(`${API_BASE_URL}${breed}/images/random/${pageSize}`);
         if (breed === location.pathname) {
             setRefetching(true);
             refetch().then(() => setRefetching(false));
-            console.log('refetch', data)
         }
-    }, [breed, location])
+    }, [breed])
 
 
     useEffect(() => {
-        console.log(data)
         if (data && typeof data.message[0] === 'string') setImages(data.message);
     }, [data])
 
@@ -45,11 +57,7 @@ export const DoggieGrid = ({ pageSize = 21 }: { pageSize?: number }) => {
         <div className="doggie-grid">
             {
                 location.pathname === "/" ?
-                    <div className="doggie-grid--search">
-                        <Search placeholder="Dog type" onSearch={function (query: string): void {
-                            throw new Error("Function not implemented.");
-                        }} />
-                    </div> : ""
+                    <DoggieSearch /> : ""
             }
             {
                 error ? <span>There was an error</span> :
@@ -58,7 +66,7 @@ export const DoggieGrid = ({ pageSize = 21 }: { pageSize?: number }) => {
                             {refetching ? <LoadingIndicator /> :
                                 images.map((image, i) => {
                                     const caption = image.split('/')[image.split('/').length - 2];
-                                    return <Card key={`doggie-card-${i}`} image={image} imageAlt={`Image of a dog`} caption={caption} />
+                                    return <Card id={`${i}`} key={`doggie-card-${i}`} image={image} imageAlt={`Image of a dog`} caption={caption} />
                                 })
                             }
                         </div>

@@ -5,7 +5,7 @@ import { BreedNavigation } from './BreedNavigation';
 import { ToggleButton } from '../components';
 import { ThemeProvider } from '../components';
 import { DoggieGrid } from './DoggieGrid';
-import { useLocation } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
 
 const App = () => {
   const [theme, setTheme] = useState('light');
@@ -17,12 +17,14 @@ const App = () => {
 
   return (
     <ThemeProvider>
+      <RecoilRoot>
       <div className="App" data-theme={theme}>
         <BreedNavigation title='Woofer'>
           <ToggleButton onChange={onThemeChange} defaultChecked={undefined} label="Dark Mode" />
         </BreedNavigation>
         <DoggieGrid />
       </div>
+      </RecoilRoot>
     </ThemeProvider>
   );
 }

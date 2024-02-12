@@ -1,10 +1,12 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 import { Expander, ExpanderRow, IconDog, LoadingIndicator, Navigation, ToggleButton } from "../../components";
 import "./BreedNavigation.scss";
 
 import { useQuery } from "react-query";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { breedsState } from "../atoms";
 
 const retrieveBreeds = async () => {
     const response = await axios.get("https://dog.ceo/api/breeds/list/all");
@@ -18,6 +20,13 @@ type Breed = {
 export const BreedNavigation = ({ title, children }: { title: string, children?: ReactNode }) => {
     let location = useLocation();
     const { data, error, isLoading } = useQuery("list", retrieveBreeds);
+    const [breeds, setBreeds] = useRecoilState(breedsState);
+
+    useEffect(() => {
+        if (data) {
+            setBreeds(Object.keys(data.message));
+        }
+    }, [data])
 
     return (
         <Navigation className="breed-navigation">
